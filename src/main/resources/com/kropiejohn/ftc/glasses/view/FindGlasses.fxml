@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.kropiejohn.ftc.glasses.control.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.kropiejohn.ftc.glasses.controller.FindGlasses"
+      prefHeight="400.0" prefWidth="680.0"
+      spacing="5">
+    <TabPane>
+        <Tab text="Search" closable="false">
+            <VBox spacing="5">
+                <!-- Right data.  -->
+                <TitledPane text="Right" collapsible="false">
+                    <HBox spacing="5">
+                        <Label text="Sphere"/>
+                        <DoubleTextField fx:id="rightSphereInput" prefWidth="70"/>
+                        <Label text="Cylinder"/>
+                        <DoubleTextField fx:id="rightCylinderInput" prefWidth="70"/>
+                        <Label text="Axis"/>
+                        <IntegerTextField fx:id="rightAxisInput" prefWidth="70"/>
+                        <Label text="Focal"/>
+                        <IntegerTextField fx:id="rightFocalInput" prefWidth="70"/>
+                    </HBox>
+                </TitledPane>
+                <!-- Left data.  -->
+                <TitledPane text="Left" collapsible="false">
+                    <HBox spacing="5">
+                        <Label text="Sphere"/>
+                        <DoubleTextField fx:id="leftSphereInput" prefWidth="70"/>
+                        <Label text="Cylinder"/>
+                        <DoubleTextField fx:id="leftCylinderInput" prefWidth="70"/>
+                        <Label text="Axis"/>
+                        <IntegerTextField fx:id="leftAxisInput" prefWidth="70"/>
+                        <Label text="Focal"/>
+                        <IntegerTextField fx:id="leftFocalInput" prefWidth="70"/>
+                    </HBox>
+                </TitledPane>
+                <!-- Misc. -->
+                <TitledPane text="Other" collapsible="false">
+                    <HBox spacing="5">
+                        <Label text="Gender"/>
+                        <ComboBox fx:id="genderInput"/>
+                        <Label text="Age"/>
+                        <ComboBox fx:id="ageInput"/>
+                        <Label text="Bifocals"/>
+                        <ComboBox fx:id="bifocalsInput"/>
+                    </HBox>
+                </TitledPane>
+            </VBox>
+        </Tab>
+        <Tab text="Results" closable="false">
+            <ScrollPane fx:id="resultsScrollPane">
+                <VBox fx:id="resultsBox" alignment="TOP_CENTER">
+                    <Button fx:id="printButton" text="Print Results" onAction="#printResults"/>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+        <Tab text="Parameters" closable="false">
+            <VBox spacing="5">
+                <HBox>
+                    <Label text="Acceptable Sphere Range (+/-)"/>
+                    <DoubleTextField fx:id="sphereRangeInput"/>
+                </HBox>
+                <HBox spacing="5">
+                    <Label text="Acceptable Cylinder Range (+/-)"/>
+                    <DoubleTextField fx:id="cylinderRangeInput"/>
+                </HBox>
+                <HBox spacing="5">
+                    <Label text="Acceptable Axis Range (+/-)"/>
+                    <IntegerTextField fx:id="axisRangeInput"/>
+                </HBox>
+                <HBox spacing="5">
+                    <Label text="Acceptable Focal Range (+/-)"/>
+                    <IntegerTextField fx:id="focalRangeInput"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+
+    <HBox alignment="BOTTOM_CENTER" spacing="5">
+        <Button text="Search" onAction="#findGlasses"/>
+        <Button text="Reset Search" onAction="#resetSearch"/>
+        <Button text="Reset Parameters" onAction="#resetParameters"/>
+        <Button text="Cancel" onAction="#cancel"/>
+    </HBox>
+</VBox>

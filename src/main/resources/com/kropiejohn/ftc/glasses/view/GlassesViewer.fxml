@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.kropiejohn.ftc.glasses.control.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.kropiejohn.ftc.glasses.controller.GlassesViewer"
+            prefHeight="400.0" prefWidth="680.0">
+    <TitledPane fx:id="titlePane" alignment="TOP_CENTER">
+        <VBox spacing="5">
+            <!-- Right data.  -->
+            <TitledPane text="Right" collapsible="false">
+                <HBox spacing="5">
+                    <Label text="Sphere"/>
+                    <DoubleTextField fx:id="rightSphereInput" prefWidth="70" editable="false"/>
+                    <Label text="Cylinder"/>
+                    <DoubleTextField fx:id="rightCylinderInput" prefWidth="70" editable="false"/>
+                    <Label text="Axis"/>
+                    <IntegerTextField fx:id="rightAxisInput" prefWidth="70" editable="false"/>
+                    <Label text="Focal"/>
+                    <IntegerTextField fx:id="rightFocalInput" prefWidth="70" editable="false"/>
+                </HBox>
+            </TitledPane>
+            <!-- Left data.  -->
+            <TitledPane text="Left" collapsible="false">
+                <HBox spacing="5">
+                    <Label text="Sphere"/>
+                    <DoubleTextField fx:id="leftSphereInput" prefWidth="70" editable="false"/>
+                    <Label text="Cylinder"/>
+                    <DoubleTextField fx:id="leftCylinderInput" prefWidth="70" editable="false"/>
+                    <Label text="Axis"/>
+                    <IntegerTextField fx:id="leftAxisInput" prefWidth="70" editable="false"/>
+                    <Label text="Focal"/>
+                    <IntegerTextField fx:id="leftFocalInput" prefWidth="70" editable="false"/>
+                </HBox>
+            </TitledPane>
+            <!-- Misc. -->
+            <TitledPane text="Other" collapsible="false">
+                <HBox spacing="5">
+                    <Label text="Gender"/>
+                    <TextField fx:id="genderInput"/>
+                    <Label text="Age"/>
+                    <TextField fx:id="ageInput" editable="false"/>
+                    <Label text="Bifocals"/>
+                    <TextField fx:id="bifocalsInput" editable="false"/>
+                </HBox>
+            </TitledPane>
+        </VBox>
+    </TitledPane>
+</AnchorPane>

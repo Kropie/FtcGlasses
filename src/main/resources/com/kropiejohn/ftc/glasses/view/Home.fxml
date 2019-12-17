@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.kropiejohn.ftc.glasses.control.IntegerTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.kropiejohn.ftc.glasses.controller.Home"
+      prefHeight="400.0" prefWidth="680.0"
+      alignment="TOP_CENTER"
+      spacing="5">
+    <Button text="Add Glasses" onAction="#addGlasses" prefWidth="135"/>
+    <HBox alignment="TOP_CENTER" spacing="5">
+        <IntegerTextField fx:id="editIndexInput" text="0" prefWidth="50"/>
+        <Button fx:id="editButton" text="Edit Glasses" onAction="#editGlasses"/>
+    </HBox>
+    <HBox alignment="TOP_CENTER" spacing="5">
+        <IntegerTextField fx:id="removeIndexInput" text="0" prefWidth="50"/>
+        <Button fx:id="removeButton" text="Remove Glasses" onAction="#removeGlasses"/>
+    </HBox>
+    <Button text="Find Glasses" onAction="#findGlasses" prefWidth="135"/>
+    <Button text="Import Glasses Database" onAction="#importGlasses"/>
+</VBox>

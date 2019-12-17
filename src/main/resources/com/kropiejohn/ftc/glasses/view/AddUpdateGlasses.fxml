@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.kropiejohn.ftc.glasses.control.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.kropiejohn.ftc.glasses.controller.AddUpdateGlasses"
+      prefHeight="400.0" prefWidth="680.0"
+      spacing="5">
+    <HBox>
+        <Label text="Inventory Number - "/>
+        <Label fx:id="numberLabel"/>
+    </HBox>
+    <!-- Right data.  -->
+    <TitledPane text="Right" collapsible="false">
+        <HBox spacing="5">
+            <Label text="Sphere"/>
+            <DoubleTextField fx:id="rightSphereInput" prefWidth="70"/>
+            <Label text="Cylinder"/>
+            <DoubleTextField fx:id="rightCylinderInput" prefWidth="70"/>
+            <Label text="Axis"/>
+            <IntegerTextField fx:id="rightAxisInput" prefWidth="70"/>
+            <Label text="Focal"/>
+            <IntegerTextField fx:id="rightFocalInput" prefWidth="70"/>
+        </HBox>
+    </TitledPane>
+    <!-- Left data.  -->
+    <TitledPane text="Left" collapsible="false">
+        <HBox spacing="5">
+            <Label text="Sphere"/>
+            <DoubleTextField fx:id="leftSphereInput" prefWidth="70"/>
+            <Label text="Cylinder"/>
+            <DoubleTextField fx:id="leftCylinderInput" prefWidth="70"/>
+            <Label text="Axis"/>
+            <IntegerTextField fx:id="leftAxisInput" prefWidth="70"/>
+            <Label text="Focal"/>
+            <IntegerTextField fx:id="leftFocalInput" prefWidth="70"/>
+        </HBox>
+    </TitledPane>
+    <!-- Misc. -->
+    <TitledPane text="Other" collapsible="false">
+        <HBox spacing="5">
+            <Label text="Gender"/>
+            <ComboBox fx:id="genderInput"/>
+            <Label text="Age"/>
+            <ComboBox fx:id="ageInput"/>
+            <Label text="Bifocals"/>
+            <ComboBox fx:id="bifocalsInput"/>
+        </HBox>
+    </TitledPane>
+    <HBox alignment="BASELINE_CENTER" spacing="5">
+        <Button fx:id="addUpdateButton" onAction="#addUpdateGlasses"/>
+        <Button text="Cancel" onAction="#cancel"/>
+    </HBox>
+</VBox>
