@@ -2,6 +2,7 @@ package com.kropiejohn.ftc.glasses.controller;
 
 import com.kropiejohn.ftc.glasses.model.*;
 import javafx.collections.FXCollections;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -10,15 +11,14 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class GlassesExcelParser {
-    private final Map<String, BiConsumer<Cell, Glasses>> processorInputMap = new HashMap<>();
-    private final Map<String, BiConsumer<Cell, Glasses>> processorOutputMap = new HashMap<>();
+    private final Map<String, BiConsumer<Cell, Glasses>> processorInputMap = new LinkedHashMap<>();
+    private final Map<String, BiConsumer<Cell, Glasses>> processorOutputMap = new LinkedHashMap<>();
 
     public GlassesExcelParser() {
         // Initialize input map.
@@ -48,35 +48,28 @@ public class GlassesExcelParser {
 
 
         // Initialize output map.
-        processorOutputMap.put("ID", (cell, glasses) -> glasses.setNumber((int) cell.getNumericCellValue()));
+        processorOutputMap.put("ID", (cell, glasses) -> cell.setCellValue(glasses.getNumber()));
 
-        processorOutputMap.put("rightSphere", (cell, glasses) -> glasses.setRightSphere(cell.getNumericCellValue()));
-        processorOutputMap.put("rightCylinder", (cell, glasses) -> glasses.setRightCylinder(cell.getNumericCellValue()));
-        processorOutputMap.put("rightAxis", (cell, glasses) -> glasses.setRightAxis((int) cell.getNumericCellValue()));
-        processorOutputMap.put("rightFocal", (cell, glasses) -> glasses.setRightFocal((int) cell.getNumericCellValue()));
+        processorOutputMap.put("rightSphere", (cell, glasses) -> cell.setCellValue(glasses.getRightSphere()));
+        processorOutputMap.put("rightCylinder", (cell, glasses) -> cell.setCellValue(glasses.getRightCylinder()));
+        processorOutputMap.put("rightAxis", (cell, glasses) -> cell.setCellValue(glasses.getRightAxis()));
+        processorOutputMap.put("rightFocal", (cell, glasses) -> cell.setCellValue(glasses.getRightFocal()));
 
-        processorOutputMap.put("leftSphere", (cell, glasses) -> glasses.setLeftSphere(cell.getNumericCellValue()));
-        processorOutputMap.put("leftCylinder", (cell, glasses) -> glasses.setLeftCylinder(cell.getNumericCellValue()));
-        processorOutputMap.put("leftAxis", (cell, glasses) -> glasses.setLeftAxis((int) cell.getNumericCellValue()));
-        processorOutputMap.put("leftFocal", (cell, glasses) -> glasses.setLeftFocal((int) cell.getNumericCellValue()));
+        processorOutputMap.put("leftSphere", (cell, glasses) -> cell.setCellValue(glasses.getLeftSphere()));
+        processorOutputMap.put("leftCylinder", (cell, glasses) -> cell.setCellValue(glasses.getLeftCylinder()));
+        processorOutputMap.put("leftAxis", (cell, glasses) -> cell.setCellValue(glasses.getLeftAxis()));
+        processorOutputMap.put("leftFocal", (cell, glasses) -> cell.setCellValue(glasses.getLeftFocal()));
 
-        processorOutputMap.put("entryDate", (cell, glasses) -> glasses.setEntryDate(cell.getDateCellValue()));
-        processorOutputMap.put("removed", (cell, glasses) -> {
-            if (cell.getCellType() == CellType.BOOLEAN) {
-                glasses.setRemoved(cell.getBooleanCellValue());
-            } else {
-                glasses.setRemoved(YesNo.NO.getEnumFromAbbreviationOrName(cell.getStringCellValue()) == YesNo.YES);
-            }
-        });
-        processorOutputMap.put("sex", (cell, glasses) -> glasses.setGender(Gender.UNISEX.getEnumFromAbbreviationOrName(cell.getStringCellValue())));
-        processorOutputMap.put("age", (cell, glasses) -> glasses.setAge(Age.ADULT.getEnumFromAbbreviationOrName(cell.getStringCellValue())));
-        processorOutputMap.put("bifocals", (cell, glasses) -> glasses.setBifocals(YesNo.NO.getEnumFromAbbreviationOrName(cell.getStringCellValue())));
-
-
+        processorOutputMap.put("entryDate", (cell, glasses) -> cell.setCellValue(glasses.getEntryDate()));
+        processorOutputMap.put("removed", (cell, glasses) -> cell.setCellValue(glasses.isRemoved() ? YesNo.YES.getAbbreviation() : YesNo.NO.getAbbreviation()));
+        processorOutputMap.put("sex", (cell, glasses) -> cell.setCellValue(glasses.getGender().getAbbreviation()));
+        processorOutputMap.put("age", (cell, glasses) -> cell.setCellValue(glasses.getAge().getAbbreviation()));
+        processorOutputMap.put("bifocals", (cell, glasses) -> cell.setCellValue(glasses.getBifocals().getAbbreviation()));
     }
 
     public void importDatabase(final Stage stage) throws IOException, InvalidFormatException {
         var fileChooser = new FileChooser();
+        fileChooser.setTitle("Import database");
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(FXCollections.observableArrayList(
                 new FileChooser.ExtensionFilter("Excel", "*.xlsx", "*.xlsm", "*.xls")));
@@ -122,14 +115,35 @@ public class GlassesExcelParser {
 
         // Build up header row.
         var columnCounter = 0;
-        for (String columnName : processorInputMap.keySet()) {
+        for (String columnName : processorOutputMap.keySet()) {
             headerRow.createCell(columnCounter++).setCellValue(columnName);
         }
 
-        var glassesValues = GlassesDatabase.INSTANCE.get().values();
-        for (Glasses glasses : glassesValues) {
+        for (Glasses glasses : GlassesDatabase.INSTANCE.getAll()) {
             var newRow = workSheet.createRow(rowCounter++);
+            columnCounter = 0;
+            for (BiConsumer<Cell, Glasses> consumer : processorOutputMap.values()) {
+                consumer.accept(newRow.createCell(columnCounter++), glasses);
+            }
+        }
 
+        var fileChooser = new DirectoryChooser();
+        fileChooser.setTitle("Choose folder for export");
+        var exportDirectory = fileChooser.showDialog(stage);
+
+        if (exportDirectory == null) {
+            return;
+        }
+
+        var month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        var year = Calendar.getInstance().get(Calendar.YEAR);
+        var date = month + "_" + day + "_" + year;
+
+        try (var fileOut = new FileOutputStream(exportDirectory.getPath() + "/ExportedDatabase_" + date + ".xlsx")) {
+            workBook.write(fileOut);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

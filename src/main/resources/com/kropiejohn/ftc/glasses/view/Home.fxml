@@ -21,4 +21,5 @@
     </HBox>
     <Button text="Find Glasses" onAction="#findGlasses" prefWidth="135"/>
     <Button text="Import Glasses Database" onAction="#importGlasses"/>
+    <Button text="Export Glasses Database" onAction="#exportGlasses"/>
 </VBox>

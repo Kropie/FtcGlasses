@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.util.converter.NumberStringConverter;
 
 import java.util.Date;
 
@@ -54,7 +53,7 @@ public class AddUpdateGlasses {
 
     void setUpdateType(UpdateType updateType, int glassesNumber) {
         if (updateType == UpdateType.UPDATE) {
-            glasses = GlassesDatabase.INSTANCE.get().get(glassesNumber);
+            glasses = GlassesDatabase.INSTANCE.get(glassesNumber);
         } else {
             glasses = new Glasses();
             glasses.setNumber(glassesNumber);
@@ -97,7 +96,7 @@ public class AddUpdateGlasses {
     @FXML
     protected void addUpdateGlasses(final ActionEvent event) throws Exception {
         glasses.setEntryDate(new Date(System.currentTimeMillis()));
-        GlassesDatabase.INSTANCE.get().put(glasses.getNumber(), glasses);
+        GlassesDatabase.INSTANCE.createUpdate(glasses);
         FtcGlasses.goHome();
     }
 

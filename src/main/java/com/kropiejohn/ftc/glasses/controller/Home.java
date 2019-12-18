@@ -40,8 +40,6 @@ public class Home {
 
     private final IntegerProperty removeGlassesProperty = new SimpleIntegerProperty(1);
 
-    private final ObservableMap<Integer, Glasses> db = GlassesDatabase.INSTANCE.get();
-
     private Scene findGlassesScene;
 
     private GlassesExcelParser glassesExcelParser;
@@ -60,10 +58,10 @@ public class Home {
 
     @FXML
     public void editGlasses(ActionEvent event) throws Exception {
-        if (!db.containsKey(editGlassesProperty.getValue())) {
+        if (!GlassesDatabase.INSTANCE.containsKey(editGlassesProperty.getValue())) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            if (db.isEmpty()) {
+            if (GlassesDatabase.INSTANCE.isEmpty()) {
                 alert.setContentText("No glasses currently in inventory.");
             } else {
                 alert.setContentText("No glasses are available at inventory number of " + editGlassesProperty.get()
@@ -71,7 +69,7 @@ public class Home {
             }
 
             alert.showAndWait();
-        } else if (db.get(editGlassesProperty.getValue()).isRemoved()) {
+        } else if (GlassesDatabase.INSTANCE.get(editGlassesProperty.getValue()).isRemoved()) {
             // The glasses have been removed. Give the user the chance to restore the glasses.
             var alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(null);
@@ -81,7 +79,7 @@ public class Home {
             var doRestore = alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
 
             if (doRestore) {
-                db.get(editGlassesProperty.get()).setRemoved(false);
+                GlassesDatabase.INSTANCE.get(editGlassesProperty.get()).setRemoved(false);
                 // Now that the glasses have been restored try again.
                 editGlasses(event);
             }
@@ -114,10 +112,10 @@ public class Home {
     }
 
     public void removeGlasses(ActionEvent event) throws Exception {
-        if (!db.containsKey(removeGlassesProperty.getValue())) {
+        if (!GlassesDatabase.INSTANCE.containsKey(removeGlassesProperty.getValue())) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            if (db.isEmpty()) {
+            if (GlassesDatabase.INSTANCE.isEmpty()) {
                 alert.setContentText("No glasses currently in inventory.");
             } else {
                 alert.setContentText("No glasses are available at inventory number of " + removeGlassesProperty.get()
@@ -131,12 +129,16 @@ public class Home {
             alert.setContentText("Are you sure want to remove the glasses?");
             var doRemoval = alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
             if (doRemoval) {
-                db.get(removeGlassesProperty.get()).setRemoved(true);
+                GlassesDatabase.INSTANCE.get(removeGlassesProperty.get()).setRemoved(true);
             }
         }
     }
 
     public void importGlasses(ActionEvent event) throws IOException, InvalidFormatException {
         glassesExcelParser.importDatabase(FtcGlasses.getStage());
+    }
+
+    public void exportGlasses(ActionEvent event) {
+        glassesExcelParser.exportDatabase(FtcGlasses.getStage());
     }
 }

@@ -46,6 +46,14 @@ public enum YesNo implements Abbreviated {
         return abbreviation;
     }
 
+    public static YesNo fromBoolean(final boolean value) {
+        if (value) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+
     @Override
     public String toString() {
         return name;

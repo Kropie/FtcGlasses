@@ -168,8 +168,7 @@ public class FindGlasses {
         resultsBox.getChildren().clear();
         foundGlasses.clear();
 
-        var db = GlassesDatabase.INSTANCE.get();
-        db.forEach((key, value) -> {
+        GlassesDatabase.INSTANCE.getAll().forEach((value) -> {
             // Check right side.
             var validGlasses = inRange(glasses.getRightSphere(), value.getRightSphere(), sphereRange.get());
             validGlasses &= inRange(glasses.getRightCylinder(), value.getRightCylinder(), cylinderRange.get());

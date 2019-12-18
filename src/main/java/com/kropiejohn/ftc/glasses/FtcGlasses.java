@@ -14,6 +14,7 @@ public class FtcGlasses extends Application {
     private static Stage stage;
     private static Scene homeScene;
 
+
     /**
      * Main method.
      *
